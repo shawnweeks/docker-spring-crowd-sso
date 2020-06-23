@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info" monitorInterval="5">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>[%-5p] [%d{MM-dd-yyyy HH:mm:ss}] [%C.%M(): line %L] %m%n</Pattern>
+            </PatternLayout>
+        </Console>
+<!--        <RollingFile name="RollingFile" fileName="log4j/osbi.log" filePattern="log4j/osbi_%d{MM-dd-yyyy}.log">
+            <PatternLayout>
+                <Pattern>[%-5p] [%d{MM-dd-yyyy HH:mm:ss}] [%C.%M(): line %L] %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="2 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10" />
+        </RollingFile>-->
+    </Appenders>
+    <Loggers>
+        <Logger name="us" level="info" />
+        <Root level="warn">
+            <AppenderRef ref="Console" />
+            <!--<AppenderRef ref="RollingFile" />-->
+        </Root>
+    </Loggers>
+</Configuration>

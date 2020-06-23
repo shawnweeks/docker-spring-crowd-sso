@@ -1,0 +1,47 @@
+<keycloak-saml-adapter xmlns="urn:keycloak:saml:adapter"
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                       xsi:schemaLocation="urn:keycloak:saml:adapter http://www.keycloak.org/schema/keycloak_saml_adapter_1_7.xsd">
+    <SP entityID="com:vdenotaris:spring:sp"
+        sslPolicy="EXTERNAL"
+        logoutPage="/logout.jsp"
+        nameIDPolicyFormat="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+        forceAuthentication="true">
+        <Keys>
+            <Key signing="true" >
+                <KeyStore file="/opt/spring-crowd-sso/samlKeystore.jks" password="nalle123">
+                    <PrivateKey alias="apollo" password="nalle123"/>
+                    <Certificate alias="apollo"/>
+                </KeyStore>
+            </Key>
+        </Keys>
+        <PrincipalNameMapping policy="FROM_NAME_ID"/>
+        <RoleIdentifiers>
+            <Attribute name="Role"/>
+        </RoleIdentifiers>
+        <IDP entityID="https://localhost/auth/realms/demo">
+            <SingleSignOnService signRequest="true"
+                                 validateResponseSignature="false"
+                                 requestBinding="REDIRECT"
+								 responseBinding="REDIRECT"
+								 bindingUrl="https://localhost/auth/realms/demo/protocol/saml"
+                    />
+
+            <SingleLogoutService
+                    validateRequestSignature="true"
+                    validateResponseSignature="true"
+                    signRequest="true"
+                    signResponse="true"
+                    requestBinding="REDIRECT"
+                    responseBinding="REDIRECT"
+                    redirectBindingUrl="https://localhost/auth/realms/saml-demo/protocol/saml"
+                    />
+            <Keys>
+                <Key signing="true">
+                    <KeyStore file="/opt/spring-crowd-sso/samlKeystore.jks" password="nalle123">
+                        <Certificate alias="apollo"/>
+                    </KeyStore>
+                </Key>
+            </Keys>
+        </IDP>
+     </SP>
+</keycloak-saml-adapter>
