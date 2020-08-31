@@ -1,3 +1,0 @@
-1. If you delete all cookies for Jira, it will eventually automatically send you to it's login page. The redirect parameter is an absolute URL instead of relative. Just another inconsistency.
-
-2. If the "keycloak-saml.xml" is missing then the SAML adapter will deny all requests to protected resources, however it will return a 200 HTTP status code with no content. It's still secure, but it's just an odd choice of a status code. Might be a bug. I would prefer it use a 500, 401, or 403.
