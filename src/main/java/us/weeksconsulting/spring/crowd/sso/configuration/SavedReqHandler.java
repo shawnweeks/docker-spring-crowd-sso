@@ -33,6 +33,7 @@ public class SavedReqHandler extends SimpleUrlAuthenticationSuccessHandler {
     LOG.debug("Redirecting to DefaultSavedRequest Url: {}", redirectTo);
     getRedirectStrategy().sendRedirect(request, response, redirectTo);
 
+    request.getSession(true).invalidate();
     LOG.traceExit();
   }
 

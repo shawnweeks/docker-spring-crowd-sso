@@ -1,5 +1,4 @@
 # This reduces the amount of data sent to Docker each time.
 .git/
-src/
 target/
 !target/*.war

@@ -1,42 +1,73 @@
 # Dockerized Spring-boot Crowd SSO Login App
 Provides a SAML based login point that can generate a Crowd SSO token.
-Since Atlassian uses a cookie to track your SSO session, this application and the Atlassian tools must be presented to the user from the same domain. Examples "my-domain.com/jira", "jira.my-domain.com".
+Since Atlassian uses a cookie to track your SSO session, this application and the Atlassian tools must be presented to the user from the same domain. Examples "my-domain.com/jira" or "jira.my-domain.com".
 
 This is a Docker image using Tomcat 9. The app itself only provides the Crowd SSO login functionality. The SAML authentication is performed by Tomcat using the Keycloak Tomcat SAML adapter valve.
 
 ## Build and Run
 
-```sh
-mvn clean package
+```shell
 docker build -t spring-crowd-sso .
-docker run \
-    -p 8080:8080 \
-    spring-crowd-sso
 ```
 
-### Environment Variables
+###  Example Run Command
+```shell
+docker run -d --name='spring-crowd-sso' \
+    -p 8080:8080 \
+    -e CROWD_SERVER_URL='http://crowd:8095/crowd/services/' \
+    -e CROWD_BASE_URL='http://crowd:8095/crowd/' \
+    -e CROWD_APPLICATION_LOGIN_URL='http://crowd:8095/crowd/console/' \
+    -e TOMCAT_SAML_ENABLED=true \
+    -e TOMCAT_SAML_SP_ENTITY_ID=tomcat \
+    -e TOMCAT_SAML_SP_SIGN_KEY=true \
+    -e TOMCAT_SAML_SP_KEY='PEM_KEY_HERE' \
+    -e TOMCAT_SAML_SP_CERT='PEM_CERT_HERE' \
+    -e TOMCAT_SAML_IDP_ENTITY_ID=idp \
+    -e TOMCAT_SAML_IDP_SIGN_REQ=true \
+    -e TOMCAT_SAML_IDP_BIND_URL='https://auth.your-domain.com/realms/master/protocol/saml' \
+    -e TOMCAT_SAML_IDP_SSO_BIND_URL='https://auth.your-domain.com/realms/master/protocol/saml' \
+    -e TOMCAT_SAML_IDP_META_URL='https://auth.your-domain.com/realms/master/protocol/saml/descriptor' \
+    spring-crowd-sso:latest
+```
 
-If a property listed here has a value assigned, that value is the default.
-
-+ `DEFAULT_REDIRECT_URL=/landing`: The default redirect URL used for succesful logins if no redirect parameter is included in the login request.
-+ `TOMCAT_PROXY_NAME`: The proxy name for Tomcat to use.
-+ `TOMCAT_PROXY_PORT`: The proxy port for Tomcat to use.
-+ `TOMCAT_SCHEME=HTTP`: The HTTP scheme for Tomcat to use. (HTTP | HTTPS)
-+ `TOMCAT_SECURE=false`: To set whether Tomcat requires a secure connection.
-+ `TOMCAT_CONTEXTPATH`: The context path Tomcat will use for the login app.
-
-#### Crowd Properties
-
-+ `CROWD_APPLICATION_NAME=spring_crowd_sso`
-+ `CROWD_APPLICATION_PASSWORD=spring_crowd_sso`
-+ `CROWD_SERVER_URL=http://localhost:8095/crowd/services/`
-+ `CROWD_BASE_URL=http://localhost:8095/crowd/`
-+ `CROWD_APPLICATION_LOGIN_URL=http://localhost:8095/crowd/console/`
-+ `CROWD_COOKIE_TOKEN_KEY=crowd.token_key`
-+ `CROWD_SESSION_IS_AUTHENTICATED=session.isauthenticated`
-+ `CROWD_SESSION_TOKEN_KEY=session.tokenkey`
-+ `CROWD_SESSION_VALIDATION_INTERVAL=2`
-+ `CROWD_SESSION_LAST_VALIDATION=session.lastvalidation`
+### Run Parameters
+| Environment Variable | Description | Default|
+| --- | --- | ---|
+| TOMCAT_PROXY_NAME | External URL for Reverse Proxy | |
+| TOMCAT_PROXY_PORT | External Port for Reverse Proxy | 443|
+| TOMCAT_SCHEME | URL Schema | https |
+| TOMCAT_SECURE | URL Secure | true |
+| TOMCAT_SAML_ENABLED | Enables Keycloak SAML Adapter for Tomcat | false|
+| KEYCLOAK_SAML_SP_ENTITY_ID | The identifier for this client | |
+| KEYCLOAK_SAML_SP_LOGOUT_PAGE | See Keycloak Documentation | None |
+| KEYCLOAK_SAML_SP_SSL_POLICY | See Keycloak Documentation | None |
+| KEYCLOAK_SAML_SP_NAME_ID_POLICY_FORMAT | See Keycloak Documentation | None |
+| KEYCLOAK_SAML_SP_FORCE_AUTH | See Keycloak Documentation | None |
+| KEYCLOAK_SAML_SP_IS_PASSIVE | See Keycloak Documentation | None |
+| KEYCLOAK_SAML_SP_SIGN_KEY | Use key to sign requests  | true|
+| KEYCLOAK_SAML_SP_ENCR_KEY | Use key to encrypt requests  | false|
+| KEYCLOAK_SAML_SP_KEY | SP private key in PEM format | |
+| KEYCLOAK_SAML_SP_CERT | SP certificate in PEM format | |
+| KEYCLOAK_SAML_SP_NAME_MAP_POLICY | Name mapping policy to be used, can be used to map name from email or other attributes | FROM_NAME_ID |
+| KEYCLOAK_SAML_SP_NAME_MAP_ATTR | If Name mapping policy is set then use this attribute for mapping | None |
+| KEYCLOAK_SAML_IDP_ENTITY_ID | This is the issuer ID of the IDP. For Keycloak this is 'idp' but that may vary. This setting is REQUIRED. | |
+| KEYCLOAK_SAML_IDP_SIGN_REQ | Does the IDP Require Signatures | true|
+| KEYCLOAK_SAML_IDP_REQ_BIND | Request binding method | POST |
+| KEYCLOAK_SAML_IDP_REP_BIND| Response binding method | POST |
+| KEYCLOAK_SAML_IDP_SSO_BIND_URL | This is the URL for the IDP login service that the client will send requests to. This setting is REQUIRED. | None |
+| KEYCLOAK_SAML_IDP_SLS_BIND_URL | This is the URL for the IDP’s logout service when using the REDIRECT binding. This setting is REQUIRED. | None |
+| DEFAULT_REDIRECT_URL | The default redirect URL used for succesful logins if no redirect parameter is included in the login request. | /landing |
+| CROWD_APPLICATION_NAME | | spring_crowd_sso |
+| CROWD_APPLICATION_PASSWORD | | spring_crowd_sso |
+| CROWD_SERVER_URL | | http://localhost:8095/crowd/services/ |
+| CROWD_BASE_URL | | http://localhost:8095/crowd/ |
+| CROWD_APPLICATION_LOGIN_URL | | http://localhost:8095/crowd/console/ |
+| CROWD_COOKIE_TOKEN_KEY | | crowd.token_key |
+| CROWD_SESSION_IS_AUTHENTICATED | | session.isauthenticated |
+| CROWD_SESSION_TOKEN_KEY | | session.tokenkey |
+| CROWD_SESSION_VALIDATION_INTERVAL | | 2 |
+| CROWD_SESSION_LAST_VALIDATION | | session.lastvalidation |
+<br/>
 
 ## Integrating With Crowd
 1. Log-in to Crowd.
@@ -57,9 +88,8 @@ If a property listed here has a value assigned, that value is the default.
 16. Add the correct hostname or IP for your application.
 
 ## Notes
-The login context path is `/saml/login`.
+The login context path is `/spring-crowd-sso/saml/login`.
 
 The redirect get query parameter is `redirectTo`. Example `https://login.my-domain.com/saml/login?redirectTo=https%3A%2F%2Fjira.my-domain.com`
 
-## Todo
-+ I should set SAML keys up correctly for proper signature validation checks in the configs.
+The allowed roles can be set in the web.xml. It's currently set to allow any roles from the IDP. Keycloak recognizes `<role-name>**</role-name>` as a wildcard for any role.
