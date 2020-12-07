@@ -7,7 +7,12 @@ This is a Docker image using Tomcat 9. The app itself only provides the Crowd SS
 ## Build and Run
 
 ```shell
-docker build -t spring-crowd-sso .
+docker build \
+    -t $REGISTRY/spring-crowd-sso:1.0.0 \
+    --build-arg BASE_REGISTRY=$REGISTRY \
+    .
+    
+docker push $REGISTRY/spring-crowd-sso
 ```
 
 ###  Example Run Command
