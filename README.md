@@ -9,7 +9,7 @@ This is a Docker image using Tomcat 9. The app itself only provides the Crowd SS
 ```shell
 docker build \
     -t $REGISTRY/spring-crowd-sso:1.0.0 \
-    --build-arg BASE_REGISTRY=$REGISTRY \
+    --build-arg REGISTRY=$REGISTRY \
     .
     
 docker push $REGISTRY/spring-crowd-sso
@@ -17,7 +17,7 @@ docker push $REGISTRY/spring-crowd-sso
 
 ###  Example Run Command
 ```shell
-docker run -d --name='spring-crowd-sso' \
+docker run -it --rm --init --name='spring-crowd-sso' \
     -p 8080:8080 \
     -e CROWD_SERVER_URL='http://crowd:8095/crowd/services/' \
     -e CROWD_BASE_URL='http://crowd:8095/crowd/' \
@@ -32,7 +32,7 @@ docker run -d --name='spring-crowd-sso' \
     -e TOMCAT_SAML_IDP_BIND_URL='https://auth.your-domain.com/realms/master/protocol/saml' \
     -e TOMCAT_SAML_IDP_SSO_BIND_URL='https://auth.your-domain.com/realms/master/protocol/saml' \
     -e TOMCAT_SAML_IDP_META_URL='https://auth.your-domain.com/realms/master/protocol/saml/descriptor' \
-    spring-crowd-sso:latest
+    $REGISTRY/spring-crowd-sso:1.0.0
 ```
 
 ### Run Parameters

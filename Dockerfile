@@ -1,8 +1,8 @@
-ARG BASE_REGISTRY
-ARG BASE_IMAGE=redhat/ubi/ubi8
-ARG BASE_TAG=8.3
+ARG REGISTRY=067151586519.dkr.ecr.us-gov-west-1.amazonaws.com
+ARG REDHAT_VERSION=8.3
+ARG TOMCAT_VERSION=9.0.38
 
-FROM ${BASE_REGISTRY}/${BASE_IMAGE}:${BASE_TAG} as build
+FROM ${REGISTRY}/redhat/ubi/ubi8:${REDHAT_VERSION} as build
 
 RUN yum install -y java-1.8.0-openjdk-devel maven.noarch
 
@@ -14,10 +14,6 @@ WORKDIR /app
 RUN mvn clean package
 
 ###############################################################################
-ARG BASE_REGISTRY
-ARG BASE_IMAGE=apache/tomcat
-ARG BASE_TAG=9.0.38
+FROM ${REGISTRY}/apache/tomcat:${TOMCAT_VERSION}
 
-FROM ${BASE_REGISTRY}/${BASE_IMAGE}:${BASE_TAG}
-
-COPY --from=build --chown=1001:1001 [ "/app/target/spring-crowd-sso.war", "${CATALINA_HOME}/webapps/" ]
+COPY --from=build --chown=1001:1001 [ "/app/target/spring-crowd-sso.war", "${TOMCAT_HOME}/webapps/" ]
