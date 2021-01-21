@@ -21,7 +21,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import us.weeksconsulting.spring.crowd.sso.properties.CrowdPropertyKeys;
 import us.weeksconsulting.spring.crowd.sso.properties.PropertyKeys;
 
@@ -39,15 +38,6 @@ public class CrowdConfig {
   @Lazy
   @Autowired
   private AuthenticationManager authenticationManager;
-
-  @Bean
-  public SimpleUrlAuthenticationFailureHandler authenticationFailureHandler() {
-    final SimpleUrlAuthenticationFailureHandler failureHandler
-        = new SimpleUrlAuthenticationFailureHandler();
-    failureHandler.setUseForward(true);
-    failureHandler.setDefaultFailureUrl("/error");
-    return failureHandler;
-  }
 
   @Bean
   public SavedReqHandler successRedirectHandler() {
@@ -117,7 +107,6 @@ public class CrowdConfig {
     authFilter.setFilterProcessesUrl("/saml/login");
     authFilter.setAuthenticationManager(authenticationManager);
     authFilter.setAuthenticationSuccessHandler(successRedirectHandler());
-    authFilter.setAuthenticationFailureHandler(authenticationFailureHandler());
 
     return authFilter;
   }
