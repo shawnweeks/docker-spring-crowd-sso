@@ -52,8 +52,4 @@ public class WebController {
         customerDAO.save(customer3);
     }
     
-     @PostConstruct
-    public void init() {
-        System.out.println("WTFFFFF");
-    }
 }
