@@ -66,3 +66,5 @@ https://demo.cloudbrocktec.com/spring-oidc/token
 You may have to add ssl certs for keycloak domain.
 
 If you hit https://demo.cloudbrocktec.com/spring-oidc/token without a redirect parameter then it will take you to a page that shows your OpenId username.
+
+https://www.keycloak.org/docs/latest/securing_apps/#_java_adapter_config
