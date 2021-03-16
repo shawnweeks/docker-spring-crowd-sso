@@ -7,8 +7,14 @@ import com.atlassian.crowd.model.authentication.UserAuthenticationContext;
 import com.atlassian.crowd.model.authentication.ValidationFactor;
 import com.atlassian.crowd.service.client.ClientProperties;
 import com.atlassian.crowd.service.client.CrowdClient;
+import org.keycloak.KeycloakPrincipal;
+import org.keycloak.KeycloakSecurityContext;
+import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.keycloak.representations.AccessToken;
+import org.keycloak.representations.IDToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,10 +45,57 @@ public class RestTest {
     @Autowired
     private Environment env;
 
+    public void testClaims(Principal principal) {
+        System.out.println("Checking principal from Spring.");
+        if (principal instanceof KeycloakAuthenticationToken) {
+            KeycloakAuthenticationToken p = (KeycloakAuthenticationToken) principal;
+//            System.out.println(p.getPrincipal().getClass().getName());
+            KeycloakPrincipal kp = (KeycloakPrincipal) p.getPrincipal();
+
+            IDToken token = kp.getKeycloakSecurityContext()
+                    .getIdToken();
+
+            AccessToken accessToken = kp.getKeycloakSecurityContext().getToken();
+            Map<String, Object> otherClaims = accessToken.getOtherClaims();
+            System.out.println("AccessToken otherClaims: " + otherClaims);
+            System.out.println("AccessToken otherClaims length: " + otherClaims.size());
+
+            Map<String, Object> customClaims = token.getOtherClaims();
+
+            System.out.println("ID token otherClaims: " + customClaims);
+            System.out.println("ID token otherClaims length: " + customClaims.size());
+        }
+
+        System.out.println("Checking principal from Keycloak auth context.");
+        KeycloakAuthenticationToken authentication = (KeycloakAuthenticationToken) SecurityContextHolder.getContext()
+                .getAuthentication();
+
+        final Principal authPrincipal = (Principal) authentication.getPrincipal();
+        if (authPrincipal instanceof KeycloakPrincipal) {
+            KeycloakPrincipal<KeycloakSecurityContext> kPrincipal = (KeycloakPrincipal<KeycloakSecurityContext>) authPrincipal;
+            IDToken token = kPrincipal.getKeycloakSecurityContext()
+                    .getIdToken();
+
+            AccessToken accessToken = kPrincipal.getKeycloakSecurityContext().getToken();
+            Map<String, Object> otherClaims = accessToken.getOtherClaims();
+            System.out.println("AccessToken: " + otherClaims);
+            System.out.println("AccessToken otherClaims length: " + otherClaims.size());
+
+            Map<String, Object> customClaims = token.getOtherClaims();
+
+            System.out.println("ID token otherClaims: " + customClaims);
+            System.out.println("ID token otherClaims length: " + customClaims.size());
+        }
+    }
+
     @GetMapping(path = "/token")
     public String getCrowdToken(HttpServletRequest request, HttpServletResponse response, Principal principal,
                                 Model model) throws Exception {
         LOG.traceEntry();
+
+        testClaims(principal);
+
+//        System.out.println(principal.getClass().getName());
 
         model.addAttribute("username", principal.getName());
 
