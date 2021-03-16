@@ -43,8 +43,6 @@ public class RestTest {
                                 Model model) throws Exception {
         LOG.traceEntry();
 
-        LOG.info("DERP");
-        
         model.addAttribute("username", principal.getName());
 
         final UserAuthenticationContext uc = new UserAuthenticationContext();
@@ -65,7 +63,7 @@ public class RestTest {
         if (null == redirectTo || redirectTo.trim().isEmpty()) {
 //            redirectTo = env.getRequiredProperty(PropertyKeys.DEFAULT_REDIRECT_URL);
 //            request.getSession(true).invalidate();
-            return "customers";
+            return "user";
         }
 
 //        response.sendRedirect(redirectTo);

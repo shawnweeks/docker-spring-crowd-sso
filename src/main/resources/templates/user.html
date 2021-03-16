@@ -3,12 +3,25 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>OpenId User</title>
+    <style type="text/css">
+        table, th, td {
+          border: 1px solid black;
+        }
+    </style>
 </head>
 <body>
-<div id="container">
-    <h1>
-        Hello, <span th:text="${username}">--name--</span>.
-    </h1>
+<div>
+    <h1>OpenId User Info:</h1>
+    <table>
+        <tr>
+            <th>Attribute</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>Username</td>
+            <td th:text="${username}">--username--</td>
+        </tr>
+    </table>
 </div>
 </body>
 </html>
