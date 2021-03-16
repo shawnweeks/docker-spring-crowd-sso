@@ -19,4 +19,5 @@ public class CrowdPropertyKeys {
   public static final String SESSION_TOKEN_KEY = "crowd.session.token_key";
   public static final String SESSION_VALIDATION_INTERVAL = "crowd.session.validation_interval";
   public static final String SESSION_LAST_VALIDATION = "crowd.session.last_validation";
+
 }

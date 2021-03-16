@@ -1,19 +1,22 @@
-ARG REGISTRY
+ARG REGISTRY=registry.cloudbrocktec.com
 ARG REDHAT_VERSION=8.3
-ARG TOMCAT_VERSION=9.0.41
 
-FROM ${REGISTRY}/redhat/ubi/ubi8:${REDHAT_VERSION} as build
+FROM ${REGISTRY}/redhat/ubi/ubi8:${REDHAT_VERSION}
 
-RUN yum install -y java-1.8.0-openjdk-devel maven.noarch
+RUN yum install -y openssl-devel java-11-openjdk-devel maven.noarch
+# RUN yum install -y openssl-devel java-1.8.0-openjdk-devel maven.noarch
 
-COPY ./src/ /app/src/
-COPY ./pom.xml /app/
+# COPY ./src/ /app/src/
+# COPY ./pom.xml /app/
+COPY ./target/spring-crowd-sso.jar /app/target/
+COPY ./entrypoint.sh /app/entrypoint.sh
 
 ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0
 WORKDIR /app
-RUN mvn clean package
+# RUN mvn clean package
 
-###############################################################################
-FROM ${REGISTRY}/apache/tomcat:${TOMCAT_VERSION}
+RUN chmod 755 /app/entrypoint.*
 
-COPY --from=build --chown=1001:1001 [ "/app/target/spring-crowd-sso.war", "${TOMCAT_HOME}/webapps/" ]
+EXPOSE 8080
+
+CMD ["/app/entrypoint.sh"]

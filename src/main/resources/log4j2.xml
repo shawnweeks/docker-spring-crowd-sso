@@ -6,21 +6,25 @@
                 <Pattern>[%-5p] [%d{MM-dd-yyyy HH:mm:ss}] [%C.%M(): line %L] %m%n</Pattern>
             </PatternLayout>
         </Console>
-<!--        <RollingFile name="RollingFile" fileName="log4j/osbi.log" filePattern="log4j/osbi_%d{MM-dd-yyyy}.log">
-            <PatternLayout>
-                <Pattern>[%-5p] [%d{MM-dd-yyyy HH:mm:ss}] [%C.%M(): line %L] %m%n</Pattern>
-            </PatternLayout>
-            <Policies>
-                <TimeBasedTriggeringPolicy />
-                <SizeBasedTriggeringPolicy size="2 MB" />
-            </Policies>
-            <DefaultRolloverStrategy max="10" />
-        </RollingFile>-->
+        <!--        <RollingFile name="RollingFile" fileName="log4j/osbi.log" filePattern="log4j/osbi_%d{MM-dd-yyyy}.log">
+                    <PatternLayout>
+                        <Pattern>[%-5p] [%d{MM-dd-yyyy HH:mm:ss}] [%C.%M(): line %L] %m%n</Pattern>
+                    </PatternLayout>
+                    <Policies>
+                        <TimeBasedTriggeringPolicy />
+                        <SizeBasedTriggeringPolicy size="2 MB" />
+                    </Policies>
+                    <DefaultRolloverStrategy max="10" />
+                </RollingFile>-->
     </Appenders>
     <Loggers>
-        <Logger name="us" level="info" />
+        <Logger name="us" level="info"/>
+        <Logger name="org.springframework.security.web.FilterChainProxy" level="debug"/>
+        <Logger name="org.keycloak" level="debug"/>
+<!--        <Logger name="org.springframework.security" level="debug"/>-->
+<!--        <Logger name="org.springframework" level="debug"/>-->
         <Root level="warn">
-            <AppenderRef ref="Console" />
+            <AppenderRef ref="Console"/>
             <!--<AppenderRef ref="RollingFile" />-->
         </Root>
     </Loggers>
