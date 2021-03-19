@@ -1,4 +1,4 @@
-package us.weeksconsulting.spring.crowd.sso.oidc;
+package us.weeksconsulting.spring.crowd.sso.controllers;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,7 +29,7 @@ public class UserInfoController {
         model.addAttribute("accessToken", accessToken);
 
         LOG.traceExit();
-        return "user";
+        return "userInfo";
     }
 
     public AccessToken extractAccessToken(final Principal principal) {

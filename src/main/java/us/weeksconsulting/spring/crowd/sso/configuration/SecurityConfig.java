@@ -1,65 +1,55 @@
-//package us.weeksconsulting.spring.crowd.sso.configuration;
-//
-//import com.atlassian.crowd.integration.springsecurity.RemoteCrowdAuthenticationProvider;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.security.authentication.AuthenticationManager;
-//import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-//import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-//import org.springframework.security.web.csrf.CsrfFilter;
-//
-///**
-// *
-// * @author Chris
-// */
-//@Configuration
-//@EnableWebSecurity
-//@EnableGlobalMethodSecurity(securedEnabled = true)
-//public class SecurityConfig extends WebSecurityConfigurerAdapter {
-//
-//  @Autowired
-//  private RemoteCrowdAuthenticationProvider crowdAuthenticationProvider;
-//  @Autowired
-//  private CrowdProcessingFilter crowdProcessingFilter;
-//
-//  @Bean
-//  @Override
-//  public AuthenticationManager authenticationManagerBean() throws Exception {
-//    return super.authenticationManagerBean();
-//  }
-//
-//  @Override
-//  protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-//    auth.authenticationProvider(crowdAuthenticationProvider);
-//  }
-//
-//  /**
-//   * Defines the web based security configuration.
-//   *
-//   * @param http It allows configuring web based security for specific http
-//   * requests.
-//   * @throws Exception
-//   */
-//  @Override
-//  protected void configure(final HttpSecurity http) throws Exception {
-//    http
-//        .httpBasic()
-//        .and()
-//        .addFilterBefore(crowdProcessingFilter, CsrfFilter.class)
-//        .authorizeRequests()
-//        .antMatchers("/").permitAll()
-//        .antMatchers("/favicon.ico").permitAll()
-//        .antMatchers("/saml/**").permitAll()
-//        .antMatchers("/css/**").permitAll()
-//        .antMatchers("/img/**").permitAll()
-//        .antMatchers("/js/**").permitAll()
-//        .anyRequest().authenticated()
-//        .and()
-//        .logout()
-//        .disable();	// The logout procedure is already handled by SAML filters.
-//  }
-//}
+package us.weeksconsulting.spring.crowd.sso.configuration;
+
+import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
+import org.keycloak.adapters.springsecurity.KeycloakSecurityComponents;
+import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
+import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
+import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+
+@Configuration
+@EnableWebSecurity
+@ComponentScan(basePackageClasses = KeycloakSecurityComponents.class)
+public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
+    // Submits the KeycloakAuthenticationProvider to the AuthenticationManager
+    @Autowired
+    public void configureGlobal(final AuthenticationManagerBuilder auth) throws Exception {
+        final KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();
+        keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
+        auth.authenticationProvider(keycloakAuthenticationProvider);
+    }
+
+    @Bean
+    public KeycloakSpringBootConfigResolver KeycloakConfigResolver() {
+        return new KeycloakSpringBootConfigResolver();
+    }
+
+    /*   
+    Specifies the session authentication strategy.
+    Keycloak adapter docs mention different strategies depending on how you are doing oidc.
+     */
+    @Bean
+    @Override
+    protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+        return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
+    }
+
+    @Override
+    protected void configure(final HttpSecurity http) throws Exception {
+        super.configure(http);
+        http.authorizeRequests()
+            .antMatchers("/userInfo", "/token")
+            .authenticated()
+            .anyRequest()
+            .permitAll();
+    }
+}

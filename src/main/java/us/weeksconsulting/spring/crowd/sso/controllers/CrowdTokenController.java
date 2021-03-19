@@ -1,4 +1,4 @@
-package us.weeksconsulting.spring.crowd.sso.oidc;
+package us.weeksconsulting.spring.crowd.sso.controllers;
 
 import com.atlassian.crowd.embedded.api.PasswordCredential;
 import com.atlassian.crowd.integration.http.util.CrowdHttpTokenHelper;
