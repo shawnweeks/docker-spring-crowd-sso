@@ -45,6 +45,33 @@ public class RestTest {
     @Autowired
     private Environment env;
 
+    public AccessToken extractAccessToken(Principal principal) {
+        if (principal instanceof KeycloakAuthenticationToken) {
+            KeycloakAuthenticationToken p = (KeycloakAuthenticationToken) principal;
+            KeycloakPrincipal kp = (KeycloakPrincipal) p.getPrincipal();
+
+            AccessToken token = kp.getKeycloakSecurityContext().getToken();
+
+            return token;
+        }
+
+        return null;
+    }
+
+    public IDToken extractIdToken(Principal principal) {
+        if (principal instanceof KeycloakAuthenticationToken) {
+            KeycloakAuthenticationToken p = (KeycloakAuthenticationToken) principal;
+            KeycloakPrincipal kp = (KeycloakPrincipal) p.getPrincipal();
+
+            IDToken token = kp.getKeycloakSecurityContext()
+                    .getIdToken();
+
+            return token;
+        }
+
+        return null;
+    }
+
     public void testClaims(Principal principal) {
         System.out.println("Checking principal from Spring.");
         if (principal instanceof KeycloakAuthenticationToken) {
@@ -55,6 +82,7 @@ public class RestTest {
             IDToken token = kp.getKeycloakSecurityContext()
                     .getIdToken();
 
+            System.out.println("Roles: " + kp.getKeycloakSecurityContext().getToken().getRealmAccess().getRoles());
             AccessToken accessToken = kp.getKeycloakSecurityContext().getToken();
             Map<String, Object> otherClaims = accessToken.getOtherClaims();
             System.out.println("AccessToken otherClaims: " + otherClaims);
@@ -117,6 +145,11 @@ public class RestTest {
         if (null == redirectTo || redirectTo.trim().isEmpty()) {
 //            redirectTo = env.getRequiredProperty(PropertyKeys.DEFAULT_REDIRECT_URL);
 //            request.getSession(true).invalidate();
+            IDToken idToken = extractIdToken(principal);
+            AccessToken accessToken = extractAccessToken(principal);
+            model.addAttribute("idToken", idToken);
+            model.addAttribute("accessToken", accessToken);
+
             return "user";
         }
 

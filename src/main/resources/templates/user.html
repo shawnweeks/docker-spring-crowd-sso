@@ -12,16 +12,250 @@
 <body>
 <div>
     <h1>OpenId User Info:</h1>
-    <table>
-        <tr>
-            <th>Attribute</th>
-            <th>Value</th>
-        </tr>
-        <tr>
-            <td>Username</td>
-            <td th:text="${username}">--username--</td>
-        </tr>
-    </table>
+    <h2>User is <span th:text="${username}">--username---</span></h2>
+    <div>
+        <h2>Roles</h2>
+        <table>
+            <tr>
+                <th>Role</th>
+            </tr>
+            <tr th:each="role : ${accessToken.getRealmAccess().getRoles()}">
+                <td th:text="${role}">--role--</td>
+            </tr>
+        </table>
+        <h2>ID Token:</h2>
+        <table>
+            <tr>
+                <th>Attribute</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>sessionState</td>
+                <td th:text="${idToken.getSessionState()}">--sessionState--</td>
+            </tr>
+            <tr>
+                <td>accessTokenHash</td>
+                <td th:text="${idToken.getAccessTokenHash()}">--accessTokenHash--</td>
+            </tr>
+            <tr>
+                <td>codeHash</td>
+                <td th:text="${idToken.getCodeHash()}">--codeHash--</td>
+            </tr>
+            <tr>
+                <td>name</td>
+                <td th:text="${idToken.getName()}">--name--</td>
+            </tr>
+            <tr>
+                <td>givenName</td>
+                <td th:text="${idToken.getGivenName()}">--givenName--</td>
+            </tr>
+            <tr>
+                <td>familyName</td>
+                <td th:text="${idToken.getFamilyName()}">--familyName--</td>
+            </tr>
+            <tr>
+                <td>middleName</td>
+                <td th:text="${idToken.getMiddleName()}">--middleName--</td>
+            </tr>
+            <tr>
+                <td>nickName</td>
+                <td th:text="${idToken.getNickName()}">--nickName--</td>
+            </tr>
+            <tr>
+                <td>preferredUsername</td>
+                <td th:text="${idToken.getPreferredUsername()}">--preferredUsername--</td>
+            </tr>
+            <tr>
+                <td>profile</td>
+                <td th:text="${idToken.getProfile()}">--profile--</td>
+            </tr>
+            <tr>
+                <td>picture</td>
+                <td th:text="${idToken.getPicture()}">--picture--</td>
+            </tr>
+            <tr>
+                <td>website</td>
+                <td th:text="${idToken.getWebsite()}">--website--</td>
+            </tr>
+            <tr>
+                <td>email</td>
+                <td th:text="${idToken.getEmail()}">--email--</td>
+            </tr>
+            <tr>
+                <td>emailVerified</td>
+                <td th:text="${idToken.getEmailVerified()}">--emailVerified--</td>
+            </tr>
+            <tr>
+                <td>gender</td>
+                <td th:text="${idToken.getGender()}">--gender--</td>
+            </tr>
+            <tr>
+                <td>birthdate</td>
+                <td th:text="${idToken.getBirthdate()}">--birthdate--</td>
+            </tr>
+            <tr>
+                <td>zoneinfo</td>
+                <td th:text="${idToken.getZoneinfo()}">--zoneinfo--</td>
+            </tr>
+            <tr>
+                <td>locale</td>
+                <td th:text="${idToken.getLocale()}">--locale--</td>
+            </tr>
+            <tr>
+                <td>phoneNumber</td>
+                <td th:text="${idToken.getPhoneNumber()}">--phoneNumber--</td>
+            </tr>
+            <tr>
+                <td>phoneNumberVerified</td>
+                <td th:text="${idToken.getPhoneNumberVerified()}">--phoneNumberVerified--</td>
+            </tr>
+            <tr>
+                <td>updatedAt</td>
+                <td th:text="${idToken.getUpdatedAt()}">--updatedAt--</td>
+            </tr>
+            <tr>
+                <td>claimsLocales</td>
+                <td th:text="${idToken.getClaimsLocales()}">--claimsLocales--</td>
+            </tr>
+            <tr>
+                <td>acr</td>
+                <td th:text="${idToken.getAcr()}">--acr--</td>
+            </tr>
+            <tr>
+                <td>stateHash</td>
+                <td th:text="${idToken.getStateHash()}">--stateHash--</td>
+            </tr>
+        </table>
+
+        <h2>Id Token Other Claims:</h2>
+        <table>
+            <tr>
+                <th>Attribute</th>
+                <th>Value</th>
+            </tr>
+            <tr th:each="key : ${idToken.getOtherClaims().keySet()}">
+                <td th:text="${key}">--key--</td>
+                <td th:text="${idToken.getOtherClaims().get(key)}">--value--</td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <h2>Access Token:</h2>
+        <table>
+            <tr>
+                <th>Attribute</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>sessionState</td>
+                <td th:text="${accessToken.getSessionState()}">--sessionState--</td>
+            </tr>
+            <tr>
+                <td>accessTokenHash</td>
+                <td th:text="${accessToken.getAccessTokenHash()}">--accessTokenHash--</td>
+            </tr>
+            <tr>
+                <td>codeHash</td>
+                <td th:text="${accessToken.getCodeHash()}">--codeHash--</td>
+            </tr>
+            <tr>
+                <td>name</td>
+                <td th:text="${accessToken.getName()}">--name--</td>
+            </tr>
+            <tr>
+                <td>givenName</td>
+                <td th:text="${accessToken.getGivenName()}">--givenName--</td>
+            </tr>
+            <tr>
+                <td>familyName</td>
+                <td th:text="${accessToken.getFamilyName()}">--familyName--</td>
+            </tr>
+            <tr>
+                <td>middleName</td>
+                <td th:text="${accessToken.getMiddleName()}">--middleName--</td>
+            </tr>
+            <tr>
+                <td>nickName</td>
+                <td th:text="${accessToken.getNickName()}">--nickName--</td>
+            </tr>
+            <tr>
+                <td>preferredUsername</td>
+                <td th:text="${accessToken.getPreferredUsername()}">--preferredUsername--</td>
+            </tr>
+            <tr>
+                <td>profile</td>
+                <td th:text="${accessToken.getProfile()}">--profile--</td>
+            </tr>
+            <tr>
+                <td>picture</td>
+                <td th:text="${accessToken.getPicture()}">--picture--</td>
+            </tr>
+            <tr>
+                <td>website</td>
+                <td th:text="${accessToken.getWebsite()}">--website--</td>
+            </tr>
+            <tr>
+                <td>email</td>
+                <td th:text="${accessToken.getEmail()}">--email--</td>
+            </tr>
+            <tr>
+                <td>emailVerified</td>
+                <td th:text="${accessToken.getEmailVerified()}">--emailVerified--</td>
+            </tr>
+            <tr>
+                <td>gender</td>
+                <td th:text="${accessToken.getGender()}">--gender--</td>
+            </tr>
+            <tr>
+                <td>birthdate</td>
+                <td th:text="${accessToken.getBirthdate()}">--birthdate--</td>
+            </tr>
+            <tr>
+                <td>zoneinfo</td>
+                <td th:text="${accessToken.getZoneinfo()}">--zoneinfo--</td>
+            </tr>
+            <tr>
+                <td>locale</td>
+                <td th:text="${accessToken.getLocale()}">--locale--</td>
+            </tr>
+            <tr>
+                <td>phoneNumber</td>
+                <td th:text="${accessToken.getPhoneNumber()}">--phoneNumber--</td>
+            </tr>
+            <tr>
+                <td>phoneNumberVerified</td>
+                <td th:text="${accessToken.getPhoneNumberVerified()}">--phoneNumberVerified--</td>
+            </tr>
+            <tr>
+                <td>updatedAt</td>
+                <td th:text="${accessToken.getUpdatedAt()}">--updatedAt--</td>
+            </tr>
+            <tr>
+                <td>claimsLocales</td>
+                <td th:text="${accessToken.getClaimsLocales()}">--claimsLocales--</td>
+            </tr>
+            <tr>
+                <td>acr</td>
+                <td th:text="${accessToken.getAcr()}">--acr--</td>
+            </tr>
+            <tr>
+                <td>stateHash</td>
+                <td th:text="${accessToken.getStateHash()}">--stateHash--</td>
+            </tr>
+        </table>
+
+        <h2>Access Token Other Claims:</h2>
+        <table>
+            <tr>
+                <th>Attribute</th>
+                <th>Value</th>
+            </tr>
+            <tr th:each="key : ${accessToken.getOtherClaims().keySet()}">
+                <td th:text="${key}">--key--</td>
+                <td th:text="${accessToken.getOtherClaims().get(key)}">--value--</td>
+            </tr>
+        </table>
+    </div>
 </div>
 </body>
 </html>
