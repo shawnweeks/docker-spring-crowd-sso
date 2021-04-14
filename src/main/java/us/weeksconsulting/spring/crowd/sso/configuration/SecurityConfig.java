@@ -59,6 +59,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/js/**").permitAll()
         .anyRequest().authenticated()
         .and()
+        .headers().contentSecurityPolicy("default-src 'none'")
+        .and().and()
         .logout()
         .disable();	// The logout procedure is already handled by SAML filters.
   }

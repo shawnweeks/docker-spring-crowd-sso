@@ -80,7 +80,6 @@ public class CrowdConfig {
     crowdProperties.setProperty("session.validationinterval", env.getProperty(CrowdPropertyKeys.SESSION_VALIDATION_INTERVAL));
     crowdProperties.setProperty("session.lastvalidation", env.getProperty(CrowdPropertyKeys.SESSION_LAST_VALIDATION));
     crowdProperties.setProperty("cookie.tokenkey", env.getProperty(CrowdPropertyKeys.COOKIE_TOKEN_KEY));
-    LOG.debug("crowdProperties: {}", crowdProperties);
     return ClientPropertiesImpl.newInstanceFromProperties(crowdProperties);
   }
 
