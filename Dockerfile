@@ -16,4 +16,11 @@ RUN mvn clean package
 ###############################################################################
 FROM ${REGISTRY}/apache/tomcat:${TOMCAT_VERSION}
 
-COPY --from=build --chown=1001:1001 [ "/app/target/spring-crowd-sso.war", "${TOMCAT_HOME}/webapps/" ]
+USER root
+
+COPY --from=build --chown=1001:1001 [ "/app/target/spring-crowd-sso.war", "${TOMCAT_INSTALL_DIR}/webapps/" ]
+COPY --chown=root:${TOMCAT_GROUP} [ "catalina.policy", "${TOMCAT_INSTALL_DIR}/conf/" ]
+
+RUN chmod 644 ${TOMCAT_INSTALL_DIR}/conf/catalina.policy
+
+USER ${TOMCAT_USER}
