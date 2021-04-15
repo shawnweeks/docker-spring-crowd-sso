@@ -177,6 +177,9 @@ grant {
     // Applications using WebSocket need to be able to access these packages
     permission java.lang.RuntimePermission "accessClassInPackage.org.apache.tomcat.websocket";
     permission java.lang.RuntimePermission "accessClassInPackage.org.apache.tomcat.websocket.server";
+    
+    // Required by Keycloak Adapter
+    permission java.security.SecurityPermission "org.apache.xml.security.register";
 };
 
 // Required Permissions for spring-crowd-sso
