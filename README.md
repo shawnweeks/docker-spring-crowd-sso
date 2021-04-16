@@ -72,32 +72,33 @@ docker run -it --rm --init --name='spring-crowd-sso' \
 ### Run Parameters
 | Environment Variable | Description | Default|
 | --- | --- | ---|
+| TOMCAT_PORT | Port Tomcat listens on. | 8080 |
 | TOMCAT_PROXY_NAME | External URL for Reverse Proxy | |
 | TOMCAT_PROXY_PORT | External Port for Reverse Proxy | 443|
 | TOMCAT_SCHEME | URL Schema | https |
 | TOMCAT_SECURE | URL Secure | true |
 | TOMCAT_SAML_ENABLED | Enables Keycloak SAML Adapter for Tomcat | false|
-| KEYCLOAK_SAML_SP_ENTITY_ID | The identifier for this client | |
-| KEYCLOAK_SAML_SP_LOGOUT_PAGE | See Keycloak Documentation | None |
-| KEYCLOAK_SAML_SP_SSL_POLICY | See Keycloak Documentation | None |
-| KEYCLOAK_SAML_SP_NAME_ID_POLICY_FORMAT | See Keycloak Documentation | None |
-| KEYCLOAK_SAML_SP_FORCE_AUTH | See Keycloak Documentation | None |
-| KEYCLOAK_SAML_SP_IS_PASSIVE | See Keycloak Documentation | None |
-| KEYCLOAK_SAML_SP_SIGN_KEY | Use key to sign requests  | true|
-| KEYCLOAK_SAML_SP_ENCR_KEY | Use key to encrypt requests  | false|
-| KEYCLOAK_SAML_SP_KEY | SP private key in PEM format | |
-| KEYCLOAK_SAML_SP_CERT | SP certificate in PEM format | |
-| KEYCLOAK_SAML_SP_NAME_MAP_POLICY | Name mapping policy to be used, can be used to map name from email or other attributes | FROM_NAME_ID |
-| KEYCLOAK_SAML_SP_NAME_MAP_ATTR | If Name mapping policy is set then use this attribute for mapping | None |
-| KEYCLOAK_SAML_IDP_ENTITY_ID | This is the issuer ID of the IDP. For Keycloak this is 'idp' but that may vary. This setting is REQUIRED. | |
-| KEYCLOAK_SAML_IDP_SIGN_REQ | Does the IDP Require Signatures | true|
-| KEYCLOAK_SAML_IDP_REQ_BIND | Request binding method | POST |
-| KEYCLOAK_SAML_IDP_REP_BIND| Response binding method | POST |
-| KEYCLOAK_SAML_IDP_SSO_BIND_URL | This is the URL for the IDP login service that the client will send requests to. This setting is REQUIRED. | None |
-| KEYCLOAK_SAML_IDP_SLS_BIND_URL | This is the URL for the IDP’s logout service when using the REDIRECT binding. This setting is REQUIRED. | None |
+| TOMCAT_SAML_SP_ENTITY_ID | The identifier for this client | |
+| TOMCAT_SAML_SP_LOGOUT_PAGE | See Keycloak Documentation | None |
+| TOMCAT_SAML_SP_SSL_POLICY | See Keycloak Documentation | None |
+| TOMCAT_SAML_SP_NAME_ID_POLICY_FORMAT | See Keycloak Documentation | None |
+| TOMCAT_SAML_SP_FORCE_AUTH | See Keycloak Documentation | None |
+| TOMCAT_SAML_SP_IS_PASSIVE | See Keycloak Documentation | None |
+| TOMCAT_SAML_SP_SIGN_KEY | Use key to sign requests  | true|
+| TOMCAT_SAML_SP_ENCR_KEY | Use key to encrypt requests  | false|
+| TOMCAT_SAML_SP_KEY | SP private key in PEM format | |
+| TOMCAT_SAML_SP_CERT | SP certificate in PEM format | |
+| TOMCAT_SAML_SP_NAME_MAP_POLICY | Name mapping policy to be used, can be used to map name from email or other attributes | FROM_NAME_ID |
+| TOMCAT_SAML_SP_NAME_MAP_ATTR | If Name mapping policy is set then use this attribute for mapping | None |
+| TOMCAT_SAML_IDP_ENTITY_ID | This is the issuer ID of the IDP. For Keycloak this is 'idp' but that may vary. This setting is REQUIRED. | |
+| TOMCAT_SAML_IDP_SIGN_REQ | Does the IDP Require Signatures | true|
+| TOMCAT_SAML_IDP_REQ_BIND | Request binding method | POST |
+| TOMCAT_SAML_IDP_REP_BIND| Response binding method | POST |
+| TOMCAT_SAML_IDP_SSO_BIND_URL | This is the URL for the IDP login service that the client will send requests to. This setting is REQUIRED. | None |
+| TOMCAT_SAML_IDP_SLS_BIND_URL | This is the URL for the IDP’s logout service when using the REDIRECT binding. This setting is REQUIRED. | None |
 | DEFAULT_REDIRECT_URL | The default redirect URL used for succesful logins if no redirect parameter is included in the login request. | /landing |
 | CROWD_APPLICATION_NAME | | spring_crowd_sso |
-| CROWD_APPLICATION_PASSWORD | | spring_crowd_sso |
+| CROWD_APPLICATION_PASSWORD | | |
 | CROWD_SERVER_URL | | http://localhost:8095/crowd/services/ |
 | CROWD_BASE_URL | | http://localhost:8095/crowd/ |
 | CROWD_APPLICATION_LOGIN_URL | | http://localhost:8095/crowd/console/ |
