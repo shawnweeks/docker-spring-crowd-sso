@@ -15,6 +15,40 @@ docker build \
 docker push $REGISTRY/spring-crowd-sso
 ```
 
+### Simple SSL Run
+```shell
+keytool -genkey -noprompt -keyalg RSA \
+        -alias selfsigned -keystore keystore.jks -storetype jks \
+        -storepass changeit -keypass changeit \
+        -dname "CN=localhost" \
+        -validity 360 -keysize 2048
+
+docker run -it --rm --init --name='spring-crowd-sso' \
+    -p 8443:8443 \
+    -v $PWD/keystore.jks:/tmp/keystore.jks \
+    -e TOMCAT_PORT=8443 \
+    -e TOMCAT_SCHEME=https \
+    -e TOMCAT_SECURE=true \
+    -e TOMCAT_SSL_ENABLED=true \
+    -e TOMCAT_KEY_ALIAS=selfsigned \
+    -e TOMCAT_KEYSTORE_FILE=/tmp/keystore.jks \
+    -e TOMCAT_KEYSTORE_PASSWORD=changeit \
+    -e CROWD_SERVER_URL='http://crowd:8095/crowd/services/' \
+    -e CROWD_BASE_URL='http://crowd:8095/crowd/' \
+    -e CROWD_APPLICATION_LOGIN_URL='http://crowd:8095/crowd/console/' \
+    -e TOMCAT_SAML_ENABLED=true \
+    -e TOMCAT_SAML_SP_ENTITY_ID=tomcat \
+    -e TOMCAT_SAML_SP_SIGN_KEY=true \
+    -e TOMCAT_SAML_SP_KEY='PEM_KEY_HERE' \
+    -e TOMCAT_SAML_SP_CERT='PEM_CERT_HERE' \
+    -e TOMCAT_SAML_IDP_ENTITY_ID=idp \
+    -e TOMCAT_SAML_IDP_SIGN_REQ=true \
+    -e TOMCAT_SAML_IDP_BIND_URL='https://auth.your-domain.com/realms/master/protocol/saml' \
+    -e TOMCAT_SAML_IDP_SSO_BIND_URL='https://auth.your-domain.com/realms/master/protocol/saml' \
+    -e TOMCAT_SAML_IDP_META_URL='https://auth.your-domain.com/realms/master/protocol/saml/descriptor' \
+    $REGISTRY/spring-crowd-sso:1.0.0
+```
+
 ###  Example Run Command
 ```shell
 docker run -it --rm --init --name='spring-crowd-sso' \
